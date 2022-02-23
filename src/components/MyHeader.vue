@@ -10,15 +10,16 @@ export default {
   data() {
     return {
       val: '',
-      newTodo:[]
+      newTodo: []
     }
   },
-  props:['getAddItem'],
-  methods:{
+  props: ['getAddItem'],
+  methods: {
     myAdd() {
-      if(this.val.trim() !== ''){
-        this.newTodo = {'id':Math.round(Math.random()*1000), 'todoName': this.val, 'done':false}
+      if (this.val.trim() !== '') {
+        this.newTodo = {'id': Math.round(Math.random() * 1000), 'todoName': this.val, 'done': false}
         this.getAddItem(this.newTodo)
+        this.val = ''
       }
     }
   }

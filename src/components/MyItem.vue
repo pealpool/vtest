@@ -1,20 +1,23 @@
 <template>
   <li>
     <label>
-      <input type="checkbox" :checked="todo.done"/>
+      <input type="checkbox" :checked="todo.done" @change="checkChange"/>
       <span>{{ todo.todoName }}</span>
     </label>
-    <button class="btn btn-danger" @click="deleteItemId(todo.id)">删除</button>
+    <button class="btn btn-danger" @click="deleteItemId()">删除</button>
   </li>
 </template>
 
 <script>
 export default {
   name: "MyItem",
-  props: ['todo','deleteItem'],
+  props: ['todo'],
   methods: {
-    deleteItemId(id){
-      this.deleteItem(id)
+    deleteItemId() {
+      this.$bus.$emit('deleteItem',this.todo.id)
+    },
+    checkChange() {
+      this.$bus.$emit('checkChange',this.todo.id)
     }
   }
 }

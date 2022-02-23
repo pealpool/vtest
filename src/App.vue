@@ -3,8 +3,8 @@
     <div class="todo-container">
       <div class="todo-wrap">
         <MyHeader :getAddItem="getAddItem"/>
-        <MyList :todos="todos" :deleteItem="deleteItem"/>
-        <MyFooter/>
+        <MyList :todos="todos"/>
+        <MyFooter :todos="todos"/>
       </div>
     </div>
   </div>
@@ -15,15 +15,14 @@ import MyHeader from "@/components/MyHeader";
 import MyFooter from "@/components/MyFooter";
 import MyList from "@/components/MyList";
 
-
 export default {
   name: 'App',
   data() {
     return {
       todos: [
-        {id: Math.round(Math.random() * 1000), todoName: '抽烟', done: true},
-        {id: Math.round(Math.random() * 1000), todoName: '喝酒', done: false},
-        {id: Math.round(Math.random() * 1000), todoName: '烫头', done: true}
+        {id: '001', todoName: '抽烟', done: true},
+        {id: '002', todoName: '喝酒', done: false},
+        {id: '003', todoName: '烫头', done: true}
       ]
     }
   },
@@ -34,7 +33,35 @@ export default {
     },
     deleteItem(id) {
       this.todos = this.todos.filter(todo => todo.id !== id)
+    },
+    doneChange(id) {
+      this.todos.forEach(function (e) {
+        if (e.id === id) {
+          e.done = !e.done
+        }
+      })
+    },
+    selectAllBtn(tf) {
+      if (tf) {
+        this.todos.forEach(e => {
+          e.done = true
+        })
+      } else {
+        this.todos.forEach(e => {
+          e.done = false
+        })
+      }
     }
+  },
+  mounted() {
+    this.$bus.$on('checkChange', this.doneChange)
+    this.$bus.$on('deleteItem', this.deleteItem)
+    this.$bus.$on('selectAllBtn', this.selectAllBtn)
+  },
+  beforeDestroy() {
+    this.$bus.$off('checkChange')
+    this.$bus.$off('deleteItem')
+    this.$bus.$off('selectAllBtn')
   }
 }
 </script>
